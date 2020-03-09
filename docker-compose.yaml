@@ -1,0 +1,18 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0.7-alpine
+  api:
+    build: .
+    image: flex-dns
+    depends_on:
+    - redis
+    volumes:
+    - .:/app
+    environment:
+      REDIS: redis
+    ports:
+    - 4567:4567
+    command: 'ruby lib/api.rb'
+  # dns:
+  #   image: flex-dns
