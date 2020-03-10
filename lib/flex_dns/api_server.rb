@@ -24,7 +24,7 @@ module FlexDns
     end
 
     get '/' do
-      @redis.get('mykey')
+      json(message: 'flex DNS is alive')
     end
 
     post '/host' do
