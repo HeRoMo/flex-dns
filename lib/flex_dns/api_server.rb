@@ -28,7 +28,7 @@ module FlexDns
     end
 
     post '/host' do
-      if valid_ip? params['address']
+      if valid_host?(params['host']) && valid_ip?(params['address'])
         @redis.set(params['host'], params['address'])
         json(result: :ok)
       else
@@ -45,6 +45,10 @@ module FlexDns
     end
 
     private
+
+    def valid_host?(host)
+      host.is_a?(String) && host.length.positive?
+    end
 
     def valid_ip?(ip)
       !!IPAddr.new(ip) rescue false
