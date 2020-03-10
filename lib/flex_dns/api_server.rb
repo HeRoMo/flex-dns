@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
 require 'redis'
 require 'sinatra/base'
 require 'sinatra/json'
 require 'sinatra/reloader'
 
 module FlexDns
-  class Api < Sinatra::Base
-    IP_PATTERN = /\A[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\Z/.freeze
+  #
+  # Rest API Server
+  #
+  class ApiServer < Sinatra::Base
     set :server, :puma
     set :bind, '0.0.0.0'
 
@@ -25,7 +28,7 @@ module FlexDns
     end
 
     post '/host' do
-      if IP_PATTERN.match? params['address']
+      if valid_ip? params['address']
         @redis.set(params['host'], params['address'])
         json(result: :ok)
       else
@@ -40,7 +43,13 @@ module FlexDns
       end
       json entries.to_h
     end
+
+    private
+
+    def valid_ip?(ip)
+      !!IPAddr.new(ip) rescue false
+    end
   end
 end
 
-FlexDns::Api.run! if __FILE__ == $PROGRAM_NAME
+FlexDns::ApiServer.run! if __FILE__ == $PROGRAM_NAME
