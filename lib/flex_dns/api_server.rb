@@ -36,6 +36,12 @@ module FlexDns
       end
     end
 
+    delete '/host' do
+      @redis.del(params['host']) if valid_host?(params['host'])
+
+      json(result: :ok)
+    end
+
     get '/list' do
       keys = @redis.keys('*')
       entries = keys.map do |key|
