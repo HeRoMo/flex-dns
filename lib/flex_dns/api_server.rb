@@ -57,7 +57,7 @@ module FlexDns
     end
 
     def valid_ip?(ip)
-      !!IPAddr.new(ip) rescue false
+      !!IPAddr.new(ip) rescue false # rubocop:disable Style/RescueModifier, Style/DoubleNegation
     end
   end
 end
