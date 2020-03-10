@@ -28,8 +28,8 @@ module FlexDns
     end
 
     post '/host' do
-      if valid_host?(params['host']) && valid_ip?(params['address'])
-        @redis.set(params['host'], params['address'])
+      if valid_host?(params['name']) && valid_ip?(params['address'])
+        @redis.set(params['name'], params['address'])
         json(result: :ok)
       else
         json(result: :ng)
@@ -37,7 +37,7 @@ module FlexDns
     end
 
     delete '/host' do
-      @redis.del(params['host']) if valid_host?(params['host'])
+      @redis.del(params['name']) if valid_host?(params['name'])
 
       json(result: :ok)
     end
