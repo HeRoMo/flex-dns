@@ -14,4 +14,4 @@ RUN set -eux; \
     apk del --purge .ruby-builddeps \
     ;
 
-COPY lib/dlex_dns lib/dlex_dns
+COPY lib/flex_dns lib/flex_dns
